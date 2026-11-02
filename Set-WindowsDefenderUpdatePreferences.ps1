@@ -1,5 +1,5 @@
-Set-MpPreference -DeploymentChannel ReleaseBroad
-Set-MpPreference -EngineUpdatesChannel Broad
-Set-MpPreference -SignatureUpdatesChannel Broad
-Set-MpPreference -PlatformUpdatesChannel Broad
-Set-MpPreference -EnableLowCpuPriority $true
+Set-MpPreference -EngineUpdatesChannel Broad -Verbose
+Set-MpPreference -SignatureUpdatesChannel Broad -Verbose
+Set-MpPreference -PlatformUpdatesChannel Broad -Verbose
+Set-MpPreference -EnableLowCpuPriority $true -Verbose
+Update-MpSignature -Verbose
