@@ -13,8 +13,8 @@ $wtsProfiles = $winTermSettings | Select-Object -ExpandProperty profiles -ErrorA
 
 #region: Windows Terminal Profile Defaults Settings
 if ($null -eq $wtsProfiles) {
-    $wtsProfiles = @{}
-    $winTermSettings | Add-Member -NotePropertyName profiles -NotePropertyValue $wtsProfiles
+    $winTermSettings | Add-Member -NotePropertyName profiles -NotePropertyValue @{}
+    $wtsProfiles = $winTermSettings | Select-Object -ExpandProperty profiles
 }
 #endregion
 
@@ -22,8 +22,7 @@ if ($null -eq $wtsProfiles) {
 $wtsProfilesDefaults = $null
 $wtsProfilesDefaults = $wtsProfiles | Select-Object -ExpandProperty defaults -ErrorAction SilentlyContinue
 if ($null -eq $wtsProfilesDefaults) {
-    $wtsProfilesDefaults = @{}
-    $wtsProfiles | Add-Member -NotePropertyName defaults -NotePropertyValue $wtsProfilesDefaults
+    $wtsProfiles | Add-Member -NotePropertyName defaults -NotePropertyValue @{}
     $wtsProfilesDefaults = $wtsProfiles | Select-Object -ExpandProperty defaults
 }
 #endregion
@@ -32,18 +31,7 @@ if ($null -eq $wtsProfilesDefaults) {
 $wtsProfilesDefaultsFont = $null
 $wtsProfilesDefaultsFont = $wtsProfilesDefaults | Select-Object -ExpandProperty font -ErrorAction SilentlyContinue
 if ($null -eq $wtsProfilesDefaultsFont) {
-    $wtsProfilesDefaultsFont = @{}
-    $wtsProfilesDefaults | Add-Member -NotePropertyName font -NotePropertyValue $wtsProfilesDefaultsFont
-}
-#endregion
-
-
-#region: Windows Terminal Profile Defaults Font Face Settings
-$wtsProfilesDefaultsFontFace = $null
-$wtsProfilesDefaultsFontFace = $wtsProfilesDefaultsFont | Select-Object -ExpandProperty face -ErrorAction SilentlyContinue
-if ($null -eq $wtsProfilesDefaultsFontFace) {
-    $wtsProfilesDefaultsFontFace = 'MesloLGM Nerd Font'
-    $wtsProfilesDefaultsFont.face = $wtsProfilesDefaultsFontFace
+    $wtsProfilesDefaults | Add-Member -NotePropertyName font -NotePropertyValue @{}
 }
 #endregion
 
@@ -51,7 +39,7 @@ if ($null -eq $wtsProfilesDefaultsFontFace) {
 $winTermSettings.profiles = $wtsProfiles
 $winTermSettings.profiles.defaults = $wtsProfilesDefaults
 $winTermSettings.profiles.defaults.font = $wtsProfilesDefaultsFont
-$winTermSettings.profiles.defaults.font.face = $wtsProfilesDefaultsFontFace
+$winTermSettings.profiles.defaults.font.face = 'MesloLGM Nerd Font'
 
 $winTermSettings | ConvertTo-Json -Depth 100 | Out-File -FilePath $winTermSettingsJsonPath -Encoding utf8 -Force
 #endregion
