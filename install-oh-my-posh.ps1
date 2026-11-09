@@ -1,6 +1,7 @@
 winget install JanDeDobbeleer.OhMyPosh --source winget
 oh-my-posh font install meslo
 
+#region: Set Default Windows Terminal Font
 #region: Windows Terminal Settings File Path
 $winTermSettingsJsonPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath 'Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json'
 $winTermSettings = Get-Content -Path $winTermSettingsJsonPath -Raw | ConvertFrom-Json
@@ -40,6 +41,20 @@ $winTermSettings.profiles = $wtsProfiles
 $winTermSettings.profiles.defaults = $wtsProfilesDefaults
 $winTermSettings.profiles.defaults.font = $wtsProfilesDefaultsFont
 $winTermSettings.profiles.defaults.font.face = 'MesloLGM Nerd Font'
+#endregion
 
 $winTermSettings | ConvertTo-Json -Depth 100 | Out-File -FilePath $winTermSettingsJsonPath -Encoding utf8 -Force
+#endregion
+
+#region: PowerShell Profile Update
+$profileSourcePath = Join-Path -Path $PSScriptRoot -ChildPath 'Microsoft.PowerShell_profile.ps1'
+if (Test-Path -Path $profileSourcePath) {
+    $newProfileContent = [Environment]::NewLine * 2
+    $newProfileContent += Get-Content -Path $profileSourcePath -Raw
+    $currentProfileContent = Get-Content -Path $PROFILE -Raw -ErrorAction SilentlyContinue
+    
+    if ($currentProfileContent -ne $newProfileContent) {
+        $newProfileContent | Out-File -FilePath $PROFILE -Encoding utf8 -Append -Force
+    }
+}
 #endregion
