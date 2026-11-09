@@ -53,7 +53,9 @@ if (Test-Path -Path $newProfileSourcePath) {
     $newProfileContent = Get-Content -Path $newProfileSourcePath -Raw
     if ($currentProfileContent -ne $newProfileContent) {
         $updatedProfileContent = $currentProfileContent
-        $updatedProfileContent += [Environment]::NewLine * 2
+        if ($null -ne $updatedProfileContent) {
+            $updatedProfileContent += [Environment]::NewLine * 2
+        }
         $updatedProfileContent += $newProfileContent
         $updatedProfileContent | Out-File -FilePath $PROFILE -Encoding utf8 -Force
     }
