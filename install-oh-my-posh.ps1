@@ -47,14 +47,15 @@ $winTermSettings | ConvertTo-Json -Depth 100 | Out-File -FilePath $winTermSettin
 #endregion
 
 #region: PowerShell Profile Update
-$profileSourcePath = Join-Path -Path $PSScriptRoot -ChildPath 'Microsoft.PowerShell_profile.ps1'
-if (Test-Path -Path $profileSourcePath) {
-    $newProfileContent = [Environment]::NewLine * 2
-    $newProfileContent += Get-Content -Path $profileSourcePath -Raw
+$newProfileSourcePath = Join-Path -Path $PSScriptRoot -ChildPath 'Microsoft.PowerShell_profile.ps1'
+if (Test-Path -Path $newProfileSourcePath) {
     $currentProfileContent = Get-Content -Path $PROFILE -Raw -ErrorAction SilentlyContinue
-    
+    $newProfileContent = Get-Content -Path $newProfileSourcePath -Raw
     if ($currentProfileContent -ne $newProfileContent) {
-        $newProfileContent | Out-File -FilePath $PROFILE -Encoding utf8 -Append -Force
+        $updatedProfileContent = $currentProfileContent
+        $updatedProfileContent += [Environment]::NewLine * 2
+        $updatedProfileContent += $newProfileContent
+        $updatedProfileContent | Out-File -FilePath $PROFILE -Encoding utf8 -Force
     }
 }
 #endregion
